@@ -123,6 +123,13 @@
   .fee-step { display:flex; gap:12px; padding:9px 0; border-bottom:1px solid rgba(93,113,145,.14); font-size:13px; }
   .fee-step:last-child { border-bottom:none; }
   .fee-n { color:var(--gold); font-weight:800; flex-shrink:0; width:20px; }
+  .fun-row { display:flex; align-items:center; gap:10px; margin:4px 0; }
+  .fun-label { width:210px; font-size:11px; text-align:right; flex-shrink:0; line-height:1.4; }
+  .fun-label small { color:var(--faint); display:block; font-size:9px; }
+  .fun-track { flex:1; height:16px; background:rgba(93,113,145,.10); border-radius:4px; overflow:hidden; }
+  .fun-bar { height:100%; background:linear-gradient(90deg,#b08a28,#e0b64f); border-radius:0 4px 4px 0; }
+  .fun-val { width:150px; font-size:11px; font-weight:700; font-variant-numeric:tabular-nums; flex-shrink:0; }
+  .fun-val small { color:var(--faint); font-weight:400; }
   .cycle { counter-reset:cy; }
   .cy-item { display:flex; gap:14px; padding:10px 0; font-size:13px; border-bottom:1px solid rgba(93,113,145,.14); }
   .cy-item:last-child { border-bottom:none; }
@@ -518,6 +525,20 @@
       <div style="font-size:11.5px;color:var(--faint);margin-top:8px">今回見つけた無名新店の実例は700〜8,000人=目標の5〜50倍の規模。<b>ただし「何回挑戦すれば1回当たるか(成功率)」はまだ測れていない</b>(Sol指摘・毎日観測を貯めて計測する)。</div>
     </div>
   </div>
+
+  <h2 class="sec" style="margin-top:7mm">市場ファネルの可視化 ― 何人が登録して、何人が稼いでいるのか(仮説)</h2>
+  <div class="sub">公式が公表している断片の数字(支払総額・年収帯別の人数)を足場に、べき分布(上位集中の法則)で補間した<b>推定ファネル</b>。バーの長さは対数スケール(1目盛りで10倍違う)。</div>
+  <div class="panel">
+    <div class="fun-row"><span class="fun-label">作られた体験(ゲーム)の累計<small>公式の累計規模感</small></span><div class="fun-track"><div class="fun-bar" style="width:100%"></div></div><span class="fun-val">数千万本<small> 規模</small></span></div>
+    <div class="fun-row"><span class="fun-label">何かしら収益のあるクリエイター<small>収益化の入口</small></span><div class="fun-track"><div class="fun-bar" style="width:72%"></div></div><span class="fun-val">数十万人<small> 規模</small></span></div>
+    <div class="fun-row"><span class="fun-label">月5万円以上<small>≒年4千ドル・副業ライン</small></span><div class="fun-track"><div class="fun-bar" style="width:56%"></div></div><span class="fun-val">3〜4万人<small> (推定)</small></span></div>
+    <div class="fun-row"><span class="fun-label">月30万円以上<small>≒年2.4万ドル・生活ライン</small></span><div class="fun-track"><div class="fun-bar" style="width:47%"></div></div><span class="fun-val">1万人前後<small> (推定)</small></span></div>
+    <div class="fun-row"><span class="fun-label">月100万円以上<small>≒年8万ドル</small></span><div class="fun-track"><div class="fun-bar" style="width:41%"></div></div><span class="fun-val">5千〜8千人<small> (推定)</small></span></div>
+    <div class="fun-row"><span class="fun-label">年10万ドル(約1,500万円)以上<small>公式公表の足場</small></span><div class="fun-track"><div class="fun-bar" style="width:38%"></div></div><span class="fun-val">数千人〜1万人<small> (公式系)</small></span></div>
+    <div class="fun-row"><span class="fun-label">トップ1,000人<small>公式公表の足場</small></span><div class="fun-track"><div class="fun-bar" style="width:30%"></div></div><span class="fun-val">平均 月1,000万円級<small> (公式系)</small></span></div>
+  </div>
+  <div class="note-box"><b>読み方と正直な注意:</b> 足場になっている公式系の数字=年間支払総額15億ドル(2025・前年比+63%)/年1万ドル以上を稼ぐクリエイターは万人単位/トップ1,000の平均年収は億円級。<b>「月5万円以上=3〜4万人」「月30万円以上=1万人前後」はそこからの補間仮説で、±数倍ズレうる。</b>それでも構造ははっきりしている——月30万円(トップの10分の1どころか100分の1)のラインは<b>世界で1万人規模が既に到達している「普通にある働き方」</b>で、宝くじではない。<br><b>未公表で測れていないもの:</b> 1日の新規ゲーム公開数(公式非公表。2025年12月の公開資格要件でスパム激減後の実数は、観測所の定点サンプリングで今後推定する→分析メニューに追加)。</div>
+
 </section>
 
 <section id="tsukai">
