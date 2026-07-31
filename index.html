@@ -126,6 +126,14 @@
   footer { border-top:1px solid var(--line); margin-top:20px; padding:18px 20px 30px;
     font-size:11px; color:var(--faint); text-align:center; line-height:1.9; }
   .trust-table td:first-child { width:110px; font-weight:700; }
+  .ck-grid { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+  @media (max-width:820px){ .ck-grid { grid-template-columns:1fr; } }
+  .ck-block { background:var(--panel); border:1px solid var(--line); border-radius:14px; padding:15px 17px; }
+  .ck-block h3 { font-size:13.5px; color:var(--gold); margin-bottom:8px; }
+  .ck { display:flex; gap:9px; padding:6px 0; font-size:12px; line-height:1.65; border-bottom:1px solid rgba(93,113,145,.12); }
+  .ck:last-child { border-bottom:none; }
+  .ck .bx { flex-shrink:0; width:14px; height:14px; border:1.5px solid var(--gold); border-radius:4px; margin-top:4px; }
+  .ck .src { display:block; font-size:9.5px; color:var(--faint); }
   .tag-jitsu { color:var(--ok); font-weight:700; }
   .tag-sui { color:var(--blue); font-weight:700; }
   .tag-suitei { color:var(--gold); font-weight:700; }
@@ -142,7 +150,7 @@
   </div>
   <nav>
     <a href="#nerai">今週の狙い目</a><a href="#kata">勝ちパターン</a><a href="#dare">誰が勝ってる</a>
-    <a href="#dosen">お客の動線</a><a href="#okane">お金の話</a><a href="#tsukai">使い方</a><a href="#shinrai">信頼度</a>
+    <a href="#dosen">お客の動線</a><a href="#okane">お金の話</a><a href="#tsukai">使い方</a><a href="#check">制作チェック</a><a href="#shinrai">信頼度</a>
   </nav>
 </div></div>
 
@@ -363,8 +371,47 @@
   <div class="mikata"><b>このページ自体の使い方:</b> データは毎週更新され、URLは変わりません。ブックマークして月曜に開くのがおすすめ。パターン(02)は観測が貯まるほど賢くなります。</div>
 </section>
 
+
+<section id="check">
+  <h2><span class="no">07</span>ヒットを狙う制作チェックリスト(現場ノウハウ・出典つき)</h2>
+  <div class="sub">YouTube開発者・X・DevForum・公式データから収集した「実際に成功している人のやり方」。全項目に発信元あり(詳細は調査記録)。作る前→出した後の順。</div>
+  <div class="ck-grid">
+    <div class="ck-block"><h3>A. 作る前に調べる(この順で)</h3>
+      <div class="ck"><span class="bx"></span><span>公式の検索ギャップから選ぶ — Robloxが四半期ごとに「検索は多いのに供給が薄いジャンル」を公表している(例: オープンワールド1,400万検索/Q1)<span class="src">Roblox公式ニュースルーム</span></span></div>
+      <div class="ck"><span class="bx"></span><span>ジャンルは「成長率×飽和度」の2軸数値で決める。感覚で選ばない<span class="src">RoLearn/DevForum</span></span></div>
+      <div class="ck"><span class="bx"></span><span>発明せずリミックス — 実証済みのスマホゲームのループをRoblox文化(マルチ・見せびらかし)に移植する。元ネタを明文化してからAIに発注<span class="src">Naavik分析</span></span></div>
+      <div class="ck"><span class="bx"></span><span>1文プロミステスト — 「◯◯して△△もらって□□集める」の1文にならない企画は捨てる<span class="src">CreatorXP</span></span></div>
+      <div class="ck"><span class="bx"></span><span>本開発の前にアイコン+タイトルだけ少額広告(250〜300 Robux)でクリック率テスト。クリックされない企画は作らない<span class="src">DevForum定石</span></span></div>
+      <div class="ck"><span class="bx"></span><span>プロトは4時間〜3日で。トップスタジオも初版はその速度(Grow a Garden初版=3日)<span class="src">The Gang/Jandel</span></span></div>
+      <div class="ck"><span class="bx"></span><span>ソロで週末に出せて1人で更新を回せる規模か(大作RPG・トレード型・人口依存の街系は個人は作らない)<span class="src">CreatorXP リスク表</span></span></div>
+      <div class="ck"><span class="bx"></span><span>「明日戻る理由」を実装前に文で書く(放置成長・週替わり限定など)。D1リテンション20%が合格線<span class="src">RoLearn</span></span></div>
+    </div>
+    <div class="ck-block"><h3>B. 出した後の計器盤(数字で判断)</h3>
+      <div class="ck"><span class="bx"></span><span>合格ライン目安: 見た人のプレイ率(QPTR)1.5〜3.6%・翌日残存(D1)7〜12%・7日残存2.9%。公式アナリティクスで「黄色以上の統計3つ」がおすすめ露出の現場相場<span class="src">DevForum/公式Analytics</span></span></div>
+      <div class="ck"><span class="bx"></span><span>最大のレバーはサムネの反復 — 差し替えだけで同接25倍・プレイ率+300%の実例。中身を作り直す前にサムネを回す<span class="src">X実例(Blushneyy他)</span></span></div>
+      <div class="ck"><span class="bx"></span><span>広告は「点火剤」— 8〜15クレジットの少額で張り、跳ねた時だけ追加。広告OFF後にホームおすすめが残るかが本当の合否<span class="src">DevForum複数</span></span></div>
+      <div class="ck"><span class="bx"></span><span>初回体験に全振り — 開始10秒で動きと小報酬、60秒で面白さの証明、180秒で最初の達成。テキストの壁禁止<span class="src">Spaceport/GameAnalytics</span></span></div>
+      <div class="ck"><span class="bx"></span><span>更新の50〜60%はプレイヤーの要望から作る(Grow a Garden方式)。週次アップデートが再露出の再点火ボタン<span class="src">Jandel(公式番組)</span></span></div>
+    </div>
+    <div class="ck-block"><h3>C. 落とし穴(これで死ぬ)</h3>
+      <div class="ck"><span class="bx"></span><span>タイトル・サムネの丸パクリは公式ペナルティ(「酷似メタデータはレコメンド優先度を落とす」と公式明記)。<b>ループは借りて、看板は変異させる</b><span class="src">Roblox公式docs</span></span></div>
+      <div class="ck"><span class="bx"></span><span>見た目に工数を溶かさない — CoD級グラのゲームが数週間で死に、低グラのGrow a Gardenが天下。決めるのはループ×心理×運営<span class="src">SmartyRBX</span></span></div>
+      <div class="ck"><span class="bx"></span><span>AIで速くなった分を「大作1本」に使わない。夢ゲー1本は5本のリリースを殺す<span class="src">SmartyRBX/RoBuilder</span></span></div>
+      <div class="ck"><span class="bx"></span><span>瞬間風速のCCU/収益スクショに騙されない。続く組はリテンション設計と計画的運営に投資している<span class="src">X(EvanZir)</span></span></div>
+      <div class="ck"><span class="bx"></span><span>公開の資格要件が新設済み(ID認証等)。複数アカのバラマキ量産は構造的に不可。1アカウントで品質ゲート持ちの量産が正解<span class="src">Roblox公式(2025-12〜)</span></span></div>
+    </div>
+    <div class="ck-block"><h3>D. AI量産への翻訳(うち用)</h3>
+      <div class="ck"><span class="bx"></span><span>週間サイクルに組み込む順序: 検索ギャップ→棚の伸び率(この観測所)→1文プロミス→アイコンCTRテスト→3日プロト→計器盤で継続/撤退</span></div>
+      <div class="ck"><span class="bx"></span><span>AIへの発注は「コアループを一発で・最大限詳細に」のプロンプトをAI自身に書かせてから投入。画面の揺れ・音・味付け(taste)は人間が指定<span class="src">SmartyRBX実演</span></span></div>
+      <div class="ck"><span class="bx"></span><span>モバイル実機で60秒プレイ検証を公開前の必須ゲートに(客の6割はスマホ)<span class="src">DevForum</span></span></div>
+      <div class="ck"><span class="bx"></span><span>捨て玉と育成枠を分ける — 指標が合格線を切ったら撤退、超えたらLiveOps(週次運営)に昇格。1本に固執しない</span></div>
+    </div>
+  </div>
+  <div class="mikata"><b>見方:</b> このリストは「観測所のデータ(01〜03)をどう制作に変換するか」の橋。Aで作るものを決め、Bの数字で続けるか決め、Cを踏まない。チェックボックスは印刷して使う用。</div>
+</section>
+
 <section id="shinrai">
-  <h2><span class="no">07</span>このデータはどこまで信じていいか</h2>
+  <h2><span class="no">08</span>このデータはどこまで信じていいか</h2>
   <div class="panel tw"><table class="trust-table"><tbody>
     <tr><td><span class="tag-jitsu">実測</span></td><td>客数・評価・できた日・ファン数 ― Roblox公式の公開データをそのまま記録。一番信じていい</td></tr>
     <tr><td><span class="tag-sui">公式の説明</span></td><td>おすすめ欄のしくみ・審査の基準 ― Roblox自身の文書(出典は調査記録に保存)</td></tr>
