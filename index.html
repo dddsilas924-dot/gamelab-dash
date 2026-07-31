@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<meta charset="utf-8">
+<title>ゲーム観測所 — Roblox市場ダッシュボード</title>
+<style>
+  :root { color-scheme: dark;
+    --bg:#0c1626; --panel:#131f33; --panel2:#182740; --line:rgba(224,182,79,.16);
+    --ink:#e6edf7; --mid:#93a5c0; --faint:#5d7191;
+    --gold:#e0b64f; --gold-deep:#b08a28; --blue:#5b8ed8;
+    --ok:#4cc273; --bad:#de5d4f; }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  html { scroll-behavior:smooth; }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior:auto; } }
+  body { background:var(--bg); color:var(--ink);
+    font-family:"Hiragino Kaku Gothic ProN","Hiragino Sans","Noto Sans JP","Yu Gothic UI",sans-serif;
+    line-height:1.75; }
+  .topbar { position:sticky; top:0; z-index:50; background:rgba(12,22,38,.92);
+    backdrop-filter:blur(8px); border-bottom:1px solid var(--line); }
+  .topbar-in { max-width:1080px; margin:0 auto; padding:12px 20px 0; }
+  .brand-row { display:flex; align-items:center; gap:14px; flex-wrap:wrap; }
+  .brand { font-size:19px; font-weight:800; letter-spacing:.02em; }
+  .brand em { color:var(--gold); font-style:normal; }
+  .obs-date { font-size:12px; color:var(--mid); }
+  .sol-badge { margin-left:auto; font-size:11px; font-weight:700; color:#0c1626;
+    background:var(--gold); border-radius:20px; padding:3px 12px; }
+  nav { display:flex; gap:2px; margin-top:9px; overflow-x:auto; }
+  nav a { font-size:12.5px; color:var(--mid); text-decoration:none; padding:8px 13px;
+    border-radius:8px 8px 0 0; white-space:nowrap; }
+  nav a:hover, nav a:focus-visible { color:var(--ink); background:var(--panel); outline:none; }
+  main { max-width:1080px; margin:0 auto; padding:26px 20px 60px; }
+  section { margin-bottom:44px; scroll-margin-top:110px; }
+  h2 { font-size:20px; font-weight:800; letter-spacing:.01em; margin-bottom:4px; }
+  h2 .no { color:var(--gold); font-size:13px; vertical-align:2px; margin-right:8px; letter-spacing:.12em; }
+  .sub { font-size:13px; color:var(--mid); margin-bottom:14px; max-width:64em; }
+  .mikata { background:linear-gradient(0deg,rgba(224,182,79,.07),rgba(224,182,79,.07)),var(--panel);
+    border-left:4px solid var(--gold); border-radius:0 10px 10px 0;
+    padding:12px 16px; font-size:13px; margin:14px 0 0; max-width:100%; }
+  .mikata b { color:var(--gold); }
+  .panel { background:var(--panel); border:1px solid var(--line); border-radius:14px; padding:18px; }
+  table { width:100%; border-collapse:collapse; font-size:13px; }
+  th { text-align:left; font-size:11px; color:var(--mid); font-weight:700; letter-spacing:.04em;
+    padding:8px 10px; border-bottom:1px solid var(--line); cursor:pointer; user-select:none; white-space:nowrap; }
+  th:hover { color:var(--gold); }
+  th .arrow { font-size:9px; opacity:.6; }
+  td { padding:9px 10px; border-bottom:1px solid rgba(93,113,145,.14); vertical-align:middle; }
+  tr:last-child td { border-bottom:none; }
+  tbody tr:hover { background:var(--panel2); }
+  .num { font-variant-numeric:tabular-nums; text-align:right; white-space:nowrap; }
+  .rank { color:var(--faint); font-weight:700; }
+  .gname { font-weight:700; max-width:240px; }
+  .unit { font-size:10px; color:var(--faint); margin-left:1px; }
+  .chip { font-size:10.5px; background:var(--panel2); border:1px solid var(--line);
+    border-radius:12px; padding:2px 9px; color:var(--mid); white-space:nowrap; }
+  .est { color:var(--gold); font-weight:700; font-size:12px; white-space:nowrap; font-variant-numeric:tabular-nums; }
+  .tw { overflow-x:auto; }
+  .legend { display:flex; gap:16px; font-size:11.5px; color:var(--mid); margin:2px 0 12px; }
+  .sw { display:inline-block; width:10px; height:10px; border-radius:3px; margin-right:5px; vertical-align:-1px; }
+  .pat { padding:13px 4px 11px; border-bottom:1px solid rgba(93,113,145,.14); }
+  .pat:last-child { border-bottom:none; }
+  .pat-head { display:flex; align-items:baseline; gap:12px; flex-wrap:wrap; margin-bottom:6px; }
+  .pat-name { font-size:14px; font-weight:800; }
+  .pat-like { font-size:11px; color:var(--mid); margin-left:auto; }
+  .bar-row { display:flex; align-items:center; gap:10px; margin:3px 0; }
+  .bar-label { width:52px; font-size:11px; color:var(--mid); text-align:right; flex-shrink:0; }
+  .bar-track { flex:1; height:14px; background:rgba(93,113,145,.12); border-radius:4px; overflow:hidden; }
+  .bar { height:100%; border-radius:0 4px 4px 0; }
+  .b-uc { background:var(--gold-deep); }
+  .b-top { background:var(--blue); }
+  .bar-val { width:76px; font-size:12px; font-variant-numeric:tabular-nums; flex-shrink:0; }
+  .bar-val small { color:var(--faint); margin-left:2px; }
+  .pat-games { font-size:11px; color:var(--faint); margin-top:5px; display:none; }
+  .pat:hover .pat-games, .pat:focus .pat-games { display:block; }
+  .stat-row { display:flex; gap:12px; flex-wrap:wrap; margin-bottom:14px; }
+  .stat { flex:1; min-width:160px; background:var(--panel); border:1px solid var(--line);
+    border-radius:14px; padding:16px 18px; }
+  .stat .v { font-size:30px; font-weight:800; font-variant-numeric:tabular-nums; line-height:1.2; }
+  .stat .v small { font-size:13px; font-weight:600; color:var(--mid); }
+  .stat .l { font-size:12px; color:var(--mid); margin-top:3px; }
+  .stat.hero { border-color:rgba(224,182,79,.5); }
+  .stat.hero .v { color:var(--gold); }
+  .cl-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:12px; }
+  .cl-card { background:var(--panel); border:1px solid var(--line); border-radius:14px; padding:14px 16px; }
+  .cl-name { font-weight:800; font-size:13.5px; }
+  .cl-count { font-size:12px; color:var(--gold); margin:3px 0; font-variant-numeric:tabular-nums; }
+  .cl-ex { font-size:11px; color:var(--faint); line-height:1.6; }
+  .flow-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:12px; }
+  .step { background:var(--panel); border:1px solid var(--line); border-radius:14px; padding:15px 16px; }
+  .step .sn { font-size:11px; font-weight:800; color:var(--gold); letter-spacing:.1em; }
+  .step h3 { font-size:14.5px; margin:4px 0 6px; }
+  .step p { font-size:12px; color:var(--mid); }
+  .warn { background:rgba(222,93,79,.08); border-left:4px solid var(--bad);
+    border-radius:0 10px 10px 0; padding:12px 16px; font-size:13px; margin-top:14px; }
+  .warn b { color:var(--bad); }
+  .okbox { background:rgba(76,194,115,.07); border-left:4px solid var(--ok);
+    border-radius:0 10px 10px 0; padding:12px 16px; font-size:13px; margin-top:14px; }
+  .okbox b { color:var(--ok); }
+  .money-grid { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+  @media (max-width:760px){ .money-grid { grid-template-columns:1fr; } }
+  .fee-step { display:flex; gap:12px; padding:9px 0; border-bottom:1px solid rgba(93,113,145,.14); font-size:13px; }
+  .fee-step:last-child { border-bottom:none; }
+  .fee-n { color:var(--gold); font-weight:800; flex-shrink:0; width:20px; }
+  .cycle { counter-reset:cy; }
+  .cy-item { display:flex; gap:14px; padding:10px 0; font-size:13px; border-bottom:1px solid rgba(93,113,145,.14); }
+  .cy-item:last-child { border-bottom:none; }
+  .cy-day { width:66px; flex-shrink:0; font-weight:800; color:var(--gold); font-size:12px; }
+  footer { border-top:1px solid var(--line); margin-top:20px; padding:18px 20px 30px;
+    font-size:11px; color:var(--faint); text-align:center; line-height:1.9; }
+  .trust-table td:first-child { width:110px; font-weight:700; }
+  .tag-jitsu { color:var(--ok); font-weight:700; }
+  .tag-sui { color:var(--blue); font-weight:700; }
+  .tag-suitei { color:var(--gold); font-weight:700; }
+</style>
+</head>
+<body>
+<div class="topbar">
+
+<div class="topbar"><div class="topbar-in">
+  <div class="brand-row">
+    <span class="brand">ゲーム<em>観測所</em> <span style="font-size:11px;color:var(--faint);font-weight:600">AIゲームラボ</span></span>
+    <span class="obs-date">観測日: 2026-07-31 ｜ データ: Roblox公式API(公開情報)</span>
+    <span class="sol-badge">Sol外部審査ずみ v1.1</span>
+  </div>
+  <nav>
+    <a href="#nerai">今週の狙い目</a><a href="#kata">勝ちパターン</a><a href="#dare">誰が勝ってる</a>
+    <a href="#dosen">お客の動線</a><a href="#okane">お金の話</a><a href="#tsukai">使い方</a><a href="#shinrai">信頼度</a>
+  </nav>
+</div></div>
+
+<main>
+<section id="nerai">
+  <h2><span class="no">01</span>今週の狙い目 TOP10</h2>
+  <div class="sub">「できたばかり × 伸びている × 個人でも作れる規模 × 高評価」の条件でふるいにかけた新店リスト。列の見出しを押すと並べ替えできます。</div>
+  <div class="panel tw"><table id="topTable"><thead><tr>
+    <th>#</th><th>ゲーム</th><th>ジャンル</th><th data-s>いま遊んでる人 <span class="arrow">↕</span></th>
+    <th data-s>高評価 <span class="arrow">↕</span></th><th data-s>できてから <span class="arrow">↕</span></th>
+    <th data-s>1日の来客 <span class="arrow">↕</span></th><th>売上の推定幅※</th>
+  </tr></thead><tbody><tr><td class="num rank">1</td><td class="gname">+1 Pickaxe Swing Escape</td><td><span class="chip">Simulation</span></td><td class="num" data-v="27685">27,685<span class="unit">人</span></td><td class="num" data-v="92">92%</td><td class="num" data-v="25.2">25日</td><td class="num" data-v="1157891">1,157,891</td><td class="est">1,719万円〜1.1億円/月</td></tr><tr><td class="num rank">2</td><td class="gname">Clark (EARLY ACCESS) - Huss rooms</td><td><span class="chip">Survival</span></td><td class="num" data-v="5036">5,036<span class="unit">人</span></td><td class="num" data-v="94">94%</td><td class="num" data-v="15.8">16日</td><td class="num" data-v="927250">927,250</td><td class="est">208万円〜1,390万円/月</td></tr><tr><td class="num rank">3</td><td class="gname">Home Alone (Anomaly)</td><td><span class="chip">Survival</span></td><td class="num" data-v="16632">16,632<span class="unit">人</span></td><td class="num" data-v="95">95%</td><td class="num" data-v="88.0">88日</td><td class="num" data-v="422686">422,686</td><td class="est">689万円〜4,590万円/月</td></tr><tr><td class="num rank">4</td><td class="gname">Greedy Growers</td><td><span class="chip">Simulation</span></td><td class="num" data-v="9511">9,511<span class="unit">人</span></td><td class="num" data-v="96">96%</td><td class="num" data-v="27.7">28日</td><td class="num" data-v="211031">211,031</td><td class="est">591万円〜3,938万円/月</td></tr><tr><td class="num rank">5</td><td class="gname">[🚜] Garden Cleaner Evolution</td><td><span class="chip">Simulation</span></td><td class="num" data-v="8222">8,222<span class="unit">人</span></td><td class="num" data-v="97">97%</td><td class="num" data-v="13.9">14日</td><td class="num" data-v="63868">63,868</td><td class="est">511万円〜3,404万円/月</td></tr><tr><td class="num rank">6</td><td class="gname">Dino Hunters[UPD]</td><td><span class="chip">Simulation</span></td><td class="num" data-v="8139">8,139<span class="unit">人</span></td><td class="num" data-v="93">93%</td><td class="num" data-v="56.4">56日</td><td class="num" data-v="204006">204,006</td><td class="est">505万円〜3,370万円/月</td></tr><tr><td class="num rank">7</td><td class="gname">[UPD3.5] Clean the Golf Yard</td><td><span class="chip">Adventure</span></td><td class="num" data-v="3462">3,462<span class="unit">人</span></td><td class="num" data-v="96">96%</td><td class="num" data-v="25.1">25日</td><td class="num" data-v="156158">156,158</td><td class="est">115万円〜764万円/月</td></tr><tr><td class="num rank">8</td><td class="gname">Catch a Brainrot</td><td><span class="chip">RPG</span></td><td class="num" data-v="6127">6,127<span class="unit">人</span></td><td class="num" data-v="90">90%</td><td class="num" data-v="70.0">70日</td><td class="num" data-v="169201">169,201</td><td class="est">304万円〜2,029万円/月</td></tr><tr><td class="num rank">9</td><td class="gname">Shred the Secrets</td><td><span class="chip">Simulation</span></td><td class="num" data-v="5596">5,596<span class="unit">人</span></td><td class="num" data-v="86">86%</td><td class="num" data-v="16.3">16日</td><td class="num" data-v="325107">325,107</td><td class="est">348万円〜2,317万円/月</td></tr><tr><td class="num rank">10</td><td class="gname">[🌍W2] +1 Hero Academia Obby Escape</td><td><span class="chip">Simulation</span></td><td class="num" data-v="736">736<span class="unit">人</span></td><td class="num" data-v="97">97%</td><td class="num" data-v="28.0">28日</td><td class="num" data-v="34303">34,303</td><td class="est">46万円〜305万円/月</td></tr></tbody></table></div>
+  <div class="mikata"><b>見方:</b> 「できて2〜4週間で、常に数千人が遊んでいて、評価が90%超」の店は<b>真似する価値のある生きた実例</b>。気になる1本を選んで「なぜ伸びてる?」を分解し、型を借りて題材を替えるのが基本の使い方。<b>※売上は推定</b>(何倍もズレうる幅。Roblox公式の決算から計算した目安で、実際の売上は公開されていません)。</div>
+</section>
+
+<section id="kata">
+  <h2><span class="no">02</span>勝ちパターン検出(機械が数えた共通点)</h2>
+  <div class="sub">急に人気が出た新店19店と、定番の人気店10店を、決まったルールで数え比べた結果。<b>新店に多くて定番に少ない項目=新人が勝つための技</b>の候補です。行にカーソルを乗せると該当ゲームが見えます。</div>
+  <div class="legend"><span><span class="sw" style="background:var(--gold-deep)"></span>急伸店(新店19店中の%)</span>
+  <span><span class="sw" style="background:var(--blue)"></span>定番店(人気10店中の%)</span></div>
+  <div class="panel">
+    <div class="pat" tabindex="0">
+      <div class="pat-head"><span class="pat-name">[UPD]生存シグナル</span>
+        <span class="pat-like">該当ゲームの平均評価 87.7%</span></div>
+      <div class="bar-row"><span class="bar-label">急伸店</span>
+        <div class="bar-track"><div class="bar b-uc" style="width:32%"></div></div>
+        <span class="bar-val">32%<small>(6本)</small></span></div>
+      <div class="bar-row"><span class="bar-label">定番店</span>
+        <div class="bar-track"><div class="bar b-top" style="width:10%"></div></div>
+        <span class="bar-val">10%<small>(1本)</small></span></div>
+      <div class="pat-games">該当: Make an Army 🚩 : Red VS Bl、Clark (EARLY ACCESS) - Hus、Dino Hunters[UPD]、[NEW!] Idle Balls 🔴</div>
+    </div>
+    <div class="pat" tabindex="0">
+      <div class="pat-head"><span class="pat-name">動詞直撃タイトル</span>
+        <span class="pat-like">該当ゲームの平均評価 90.0%</span></div>
+      <div class="bar-row"><span class="bar-label">急伸店</span>
+        <div class="bar-track"><div class="bar b-uc" style="width:26%"></div></div>
+        <span class="bar-val">26%<small>(5本)</small></span></div>
+      <div class="bar-row"><span class="bar-label">定番店</span>
+        <div class="bar-track"><div class="bar b-top" style="width:20%"></div></div>
+        <span class="bar-val">20%<small>(2本)</small></span></div>
+      <div class="pat-games">該当: [🍯] Unbox ASMR!、Make an Army 🚩 : Red VS Bl、Catch a Brainrot、Shred the Secrets</div>
+    </div>
+    <div class="pat" tabindex="0">
+      <div class="pat-head"><span class="pat-name">LIKEご褒美CTA</span>
+        <span class="pat-like">該当ゲームの平均評価 94.1%</span></div>
+      <div class="bar-row"><span class="bar-label">急伸店</span>
+        <div class="bar-track"><div class="bar b-uc" style="width:26%"></div></div>
+        <span class="bar-val">26%<small>(5本)</small></span></div>
+      <div class="bar-row"><span class="bar-label">定番店</span>
+        <div class="bar-track"><div class="bar b-top" style="width:20%"></div></div>
+        <span class="bar-val">20%<small>(2本)</small></span></div>
+      <div class="pat-games">該当: [🍯] Unbox ASMR!、Make an Army 🚩 : Red VS Bl、+1 Pickaxe Swing Escape、[UPD3.5] Clean the Golf Ya</div>
+    </div>
+    <div class="pat" tabindex="0">
+      <div class="pat-head"><span class="pat-name">掃除・開封ループ</span>
+        <span class="pat-like">該当ゲームの平均評価 92.7%</span></div>
+      <div class="bar-row"><span class="bar-label">急伸店</span>
+        <div class="bar-track"><div class="bar b-uc" style="width:26%"></div></div>
+        <span class="bar-val">26%<small>(5本)</small></span></div>
+      <div class="bar-row"><span class="bar-label">定番店</span>
+        <div class="bar-track"><div class="bar b-top" style="width:2%"></div></div>
+        <span class="bar-val">0%<small>(0本)</small></span></div>
+      <div class="pat-games">該当: [🍯] Unbox ASMR!、[🚜] Garden Cleaner Evoluti、Shred the Secrets、[UPD3.5] Clean the Golf Ya</div>
+    </div>
+    <div class="pat" tabindex="0">
+      <div class="pat-head"><span class="pat-name">フォロー通知網CTA</span>
+        <span class="pat-like">該当ゲームの平均評価 89.5%</span></div>
+      <div class="bar-row"><span class="bar-label">急伸店</span>
+        <div class="bar-track"><div class="bar b-uc" style="width:21%"></div></div>
+        <span class="bar-val">21%<small>(4本)</small></span></div>
+      <div class="bar-row"><span class="bar-label">定番店</span>
+        <div class="bar-track"><div class="bar b-top" style="width:20%"></div></div>
+        <span class="bar-val">20%<small>(2本)</small></span></div>
+      <div class="pat-games">該当: [🍯] Unbox ASMR!、Make an Army 🚩 : Red VS Bl、Greedy Growers、Voxels</div>
+    </div>
+    <div class="pat" tabindex="0">
+      <div class="pat-head"><span class="pat-name">友だち同伴バフ</span>
+        <span class="pat-like">該当ゲームの平均評価 90.2%</span></div>
+      <div class="bar-row"><span class="bar-label">急伸店</span>
+        <div class="bar-track"><div class="bar b-uc" style="width:21%"></div></div>
+        <span class="bar-val">21%<small>(4本)</small></span></div>
+      <div class="bar-row"><span class="bar-label">定番店</span>
+        <div class="bar-track"><div class="bar b-top" style="width:30%"></div></div>
+        <span class="bar-val">30%<small>(3本)</small></span></div>
+      <div class="pat-games">該当: [🍯] Unbox ASMR!、🕹️ Endless GAMES [NO ADS]、[CRUELTY SOON]🚪Survive Ver、[UPD3.5] Clean the Golf Ya</div>
+    </div>
+    <div class="pat" tabindex="0">
+      <div class="pat-head"><span class="pat-name">検索タグ行</span>
+        <span class="pat-like">該当ゲームの平均評価 93.6%</span></div>
+      <div class="bar-row"><span class="bar-label">急伸店</span>
+        <div class="bar-track"><div class="bar b-uc" style="width:16%"></div></div>
+        <span class="bar-val">16%<small>(3本)</small></span></div>
+      <div class="bar-row"><span class="bar-label">定番店</span>
+        <div class="bar-track"><div class="bar b-top" style="width:2%"></div></div>
+        <span class="bar-val">0%<small>(0本)</small></span></div>
+      <div class="pat-games">該当: Make an Army 🚩 : Red VS Bl、Home Alone (Anomaly)、[🌍W2] +1 Hero Academia Obb</div>
+    </div>
+    <div class="pat" tabindex="0">
+      <div class="pat-head"><span class="pat-name">+1系フォーマット</span>
+        <span class="pat-like">該当ゲームの平均評価 94.5%</span></div>
+      <div class="bar-row"><span class="bar-label">急伸店</span>
+        <div class="bar-track"><div class="bar b-uc" style="width:11%"></div></div>
+        <span class="bar-val">11%<small>(2本)</small></span></div>
+      <div class="bar-row"><span class="bar-label">定番店</span>
+        <div class="bar-track"><div class="bar b-top" style="width:10%"></div></div>
+        <span class="bar-val">10%<small>(1本)</small></span></div>
+      <div class="pat-games">該当: +1 Pickaxe Swing Escape、[🌍W2] +1 Hero Academia Obb</div>
+    </div>
+    <div class="pat" tabindex="0">
+      <div class="pat-head"><span class="pat-name">ミーム語相乗り</span>
+        <span class="pat-like">該当ゲームの平均評価 83.5%</span></div>
+      <div class="bar-row"><span class="bar-label">急伸店</span>
+        <div class="bar-track"><div class="bar b-uc" style="width:11%"></div></div>
+        <span class="bar-val">11%<small>(2本)</small></span></div>
+      <div class="bar-row"><span class="bar-label">定番店</span>
+        <div class="bar-track"><div class="bar b-top" style="width:2%"></div></div>
+        <span class="bar-val">0%<small>(0本)</small></span></div>
+      <div class="pat-games">該当: Catch a Brainrot、[CRUELTY SOON]🚪Survive Ver</div>
+    </div>
+    <div class="pat" tabindex="0">
+      <div class="pat-head"><span class="pat-name">命名テンプレ借用(Anomaly系)</span>
+        <span class="pat-like">該当ゲームの平均評価 94.9%</span></div>
+      <div class="bar-row"><span class="bar-label">急伸店</span>
+        <div class="bar-track"><div class="bar b-uc" style="width:5%"></div></div>
+        <span class="bar-val">5%<small>(1本)</small></span></div>
+      <div class="bar-row"><span class="bar-label">定番店</span>
+        <div class="bar-track"><div class="bar b-top" style="width:10%"></div></div>
+        <span class="bar-val">10%<small>(1本)</small></span></div>
+      <div class="pat-games">該当: Home Alone (Anomaly)</div>
+    </div>
+    <div class="pat" tabindex="0">
+      <div class="pat-head"><span class="pat-name">ASMR・satisfying系</span>
+        <span class="pat-like">該当ゲームの平均評価 97.0%</span></div>
+      <div class="bar-row"><span class="bar-label">急伸店</span>
+        <div class="bar-track"><div class="bar b-uc" style="width:5%"></div></div>
+        <span class="bar-val">5%<small>(1本)</small></span></div>
+      <div class="bar-row"><span class="bar-label">定番店</span>
+        <div class="bar-track"><div class="bar b-top" style="width:10%"></div></div>
+        <span class="bar-val">10%<small>(1本)</small></span></div>
+      <div class="pat-games">該当: [🍯] Unbox ASMR!</div>
+    </div></div>
+  <div class="mikata"><b>見方:</b> 例えば「[UPD]更新中の看板」は新店32% vs 定番10%で差が最大=<b>新店ほど「動いてる感」をタイトルで見せている</b>。自分のゲームを出すときは、上位のパターンをチェックリストとして使う。この数字は毎週の観測で自動更新される(パターンは今後も追加)。</div>
+</section>
+
+<section id="dare">
+  <h2><span class="no">03</span>誰が勝ってるのか(地力か、実力か)</h2>
+  <div class="sub">急伸19店の店主を全員調査(Roblox内のファン数と過去の店の実績)。</div>
+  <div class="stat-row">
+    <div class="stat hero"><div class="v">11<small> / 19店</small></div><div class="l">Roblox内では無名の個人・新人の店</div></div>
+    <div class="stat"><div class="v">5<small> 店</small></div><div class="l">中堅(ファン数万人・小ヒット経験)</div></div>
+    <div class="stat"><div class="v">3<small> 店</small></div><div class="l">大手(ファン数十万〜337万人)</div></div>
+  </div>
+  <div class="okbox"><b>読み方:</b> 入り口(ランキング入り)は無名でも通れている。ただし頂点(客数1・2位)は大手が持つ二階建て構造。私たちの目標(月20〜30万円)は入り口側の話なので追い風。<b>注意:</b> 「無名」判定はRobloxの中の情報だけ。外のYouTube人気や広告費は見えていない(Sol指摘・SNSリンクの本格調査は次の課題)。</div>
+  <h2 style="margin-top:26px"><span class="no">03b</span>二番煎じ(型の相乗り)の実例</h2>
+  <div class="sub">同じ日のランキングに「本家とそっくりさん」が並んでいた=型を借りるのは公認の標準戦法。</div>
+  <div class="cl-grid">
+    <div class="cl-card"><div class="cl-name">掃除・開封系</div>
+      <div class="cl-count">急伸5本 / 定番0本</div>
+      <div class="cl-ex">[🍯] Unbox ASMR!、[🚜] Garden Cleaner Evolu、Shred the Secrets</div></div>
+    <div class="cl-card"><div class="cl-name">+1 ◯◯ (Escape)系</div>
+      <div class="cl-count">急伸2本 / 定番1本</div>
+      <div class="cl-ex">+1 Pickaxe Swing Escape、[🌍W2] +1 Hero Academia O、[💲]+1 Speed Keyboard Esc</div></div>
+    <div class="cl-card"><div class="cl-name">◯◯ (Anomaly)系</div>
+      <div class="cl-count">急伸1本 / 定番1本</div>
+      <div class="cl-ex">Home Alone (Anomaly)、Animal Hospital (Anomaly</div></div></div>
+  <div class="mikata"><b>見方:</b> <b>横展開</b>=勝ってる型のまま題材だけ替える(「+1系」×掃除など)。<b>縦展開</b>=当たった題材を深掘り(掃除×対戦、掃除×経営…)。ただし他人の作品のキャラ名をそのまま使うのはNG(消されるリスク)。</div>
+</section>
+
+<section id="dosen">
+  <h2><span class="no">04</span>お客はどこから来るのか</h2>
+  <div class="sub">Roblox公式の発表: <b>お客の9割以上は「トップページのおすすめ欄」から来る</b>。ランキングは賞状であって、通り道ではない。新店がおすすめ欄に載るまでの道のりは4段階。</div>
+  <div class="flow-grid">
+    <div class="step"><div class="sn">STEP 0 ― 開店直後</div><h3>まだ誰にも紹介されない</h3><p>おすすめ欄に載り始めるまで3〜12日かかる。最初の数十人は自力で集める(検索に引っかかる店名・少額の公式広告・仲間内で遊び合う)。お客ゼロの店は審査対象にすらならない。</p></div>
+    <div class="step"><div class="sn">STEP 1 ― お試し紹介</div><h3>少人数にだけ試験表示</h3><p>試食コーナーのようなもの。「見た人が入店するか」「すぐ帰らないか」が審査される。<b>看板(サムネ)と最初の3分が勝負。</b></p></div>
+    <div class="step"><div class="sn">STEP 2 ― 合格して拡大</div><h3>大勢に紹介される</h3><p>審査は客の総数でなく<b>「1人あたりの満足度」</b>(公式明言)。だから無名でも勝てる。急伸ランキング入りはこの段階のご褒美。</p></div>
+    <div class="step"><div class="sn">STEP 3 ― 定番化</div><h3>更新のたびに再紹介</h3><p>新メニュー(アップデート)を出すたび、お試し紹介がもう一度もらえる。週1更新+お知らせ通知が定番店への道。</p></div>
+  </div>
+  <div class="warn"><b>お金で審査は買えない(超重要):</b> 広告で連れてきたお客の評判は、おすすめ欄の審査に入らない(公式仕様)。広告は「店を空にしないための呼び水」まで。審査に効くのは自然に来たお客の満足度だけ=<b>資金のない個人にとって最高のルール</b>。</div>
+  <div class="warn" style="border-color:var(--gold)"><b style="color:var(--gold)">2026年6月のルール変更:</b> 審査が「28日間あきずに遊ばれるか」重視に。派手な看板で釣る薄い店は明確に降格される。→作戦は<b>「試作はAIでたくさん、お店として出すのは毎日通いたくなる仕掛けを入れた自信作だけ」</b>。</div>
+</section>
+
+<section id="okane">
+  <h2><span class="no">05</span>お金の話(Sol検算ずみ)</h2>
+  <div class="money-grid">
+    <div class="panel">
+      <div style="font-weight:800;margin-bottom:8px">手数料のしくみ</div>
+      <div class="fee-step"><span class="fee-n">1</span><span>お客がRobux(ゲーム内マネー)を買う ― 目安 1,000 Robux ≒ 約12.5ドル</span></div>
+      <div class="fee-step"><span class="fee-n">2</span><span>ゲーム内課金の<b>70%が開発者のもの</b>(30%はRoblox)</span></div>
+      <div class="fee-step"><span class="fee-n">3</span><span>換金レートは購入価格よりかなり安い(100,000 Robux=350ドル)。最低換金額あり(約10万Robux)</span></div>
+      <div class="fee-step"><span class="fee-n">=</span><span>手取りは<b>お客が払った現金の約20%(税引き前)</b>。検算: 12.5ドル→700 Robux→2.45ドル=19.6%</span></div>
+      <div style="font-size:11.5px;color:var(--faint);margin-top:8px">それでも悪くない理由: スマホゲームは「ストアに30%+売上の3〜5割を広告費」が普通。Robloxはお客の9割を無料で連れてくる=20%は広告費・決済・サーバー代ぜんぶ込みの手取り。</div>
+    </div>
+    <div class="panel">
+      <div style="font-weight:800;margin-bottom:8px">目標「月20〜30万円」に必要な規模</div>
+      <table><thead><tr><th style="cursor:default">手取り目標(月)</th><th style="cursor:default">必要な平均客数</th></tr></thead>
+      <tbody>
+        <tr><td>20〜30万円</td><td class="num">つねに100〜220人が店内にいる規模</td></tr>
+        <tr><td>100万円</td><td class="num">約500〜720人</td></tr>
+        <tr><td>300万円(トップ級)</td><td class="num">約1,500〜2,200人</td></tr>
+      </tbody></table>
+      <div style="font-size:11.5px;color:var(--faint);margin-top:8px">今回見つけた無名新店の実例は700〜8,000人=目標の5〜50倍の規模。<b>ただし「何回挑戦すれば1回当たるか(成功率)」はまだ測れていない</b>(Sol指摘・毎日観測を貯めて計測する)。</div>
+    </div>
+  </div>
+</section>
+
+<section id="tsukai">
+  <h2><span class="no">06</span>使い方 ― 週1回、このサイクルを回す</h2>
+  <div class="panel cycle">
+    <div class="cy-item"><span class="cy-day">月曜</span><span>このダッシュボードで「今週の波」を確認(01と02を見る)。狙い目から気になる1本を選ぶ</span></div>
+    <div class="cy-item"><span class="cy-day">火・水</span><span>選んだ店を分解(なぜ伸びてる?)→ 型を借りて題材を替えた企画を1枚書く → AIに作らせる</span></div>
+    <div class="cy-item"><span class="cy-day">木・金</span><span>仲間内で遊び合ってテスト(合法の初速ブースター)。すぐ帰りたくなる箇所を直す</span></div>
+    <div class="cy-item"><span class="cy-day">週末</span><span>自信作だけ公開。看板は「動詞+目的語」の英語+[NEW!]。いいねのお礼アイテムを忘れずに</span></div>
+    <div class="cy-item"><span class="cy-day">翌週</span><span>自分の店の数字を観測所で確認 → 伸びたら週1更新で再紹介をもらい続ける</span></div>
+  </div>
+  <div class="mikata"><b>このページ自体の使い方:</b> データは毎週更新され、URLは変わりません。ブックマークして月曜に開くのがおすすめ。パターン(02)は観測が貯まるほど賢くなります。</div>
+</section>
+
+<section id="shinrai">
+  <h2><span class="no">07</span>このデータはどこまで信じていいか</h2>
+  <div class="panel tw"><table class="trust-table"><tbody>
+    <tr><td><span class="tag-jitsu">実測</span></td><td>客数・評価・できた日・ファン数 ― Roblox公式の公開データをそのまま記録。一番信じていい</td></tr>
+    <tr><td><span class="tag-sui">公式の説明</span></td><td>おすすめ欄のしくみ・審査の基準 ― Roblox自身の文書(出典は調査記録に保存)</td></tr>
+    <tr><td><span class="tag-suitei">推定・推理</span></td><td>売上の幅・「なぜ売れてるか」の解釈 ― 何倍もズレうる。方向を決める参考まで</td></tr>
+  </tbody></table></div>
+  <div class="warn"><b>正直な限界(Sol外部審査で確認):</b> ①成功した店しか見ていない(失敗した店の数=成功率は未計測) ②「無名」判定はRobloxの中の情報だけ(外部のYouTube人気・広告費は見えない) ③1日分の写真であり、変化は毎日観測が貯まってから。外部AI審査官Solの採点は55点=「方向決めには十分、お金の判断の根拠にはまだ」。点数の上げ方(毎日観測・出典明記)は判明済みで、貯めるほど賢くなる設計です。</div>
+</section>
+</main>
+<footer>ゲーム観測所 β ― AIゲームクリエイターラボ内部用(無断転載禁止) ｜ データ: Roblox公式API ｜ 売上はすべて推定であり実測ではありません ｜ 生成: make_dashboard.py</footer>
+
+<script>
+(function(){
+  var table = document.getElementById('topTable');
+  if(!table) return;
+  var ths = table.querySelectorAll('th[data-s]');
+  ths.forEach(function(th){
+    var asc = false;
+    th.addEventListener('click', function(){
+      var idx = Array.prototype.indexOf.call(th.parentNode.children, th);
+      var tb = table.tBodies[0];
+      var rows = Array.prototype.slice.call(tb.rows);
+      rows.sort(function(a,b){
+        var av = parseFloat(a.cells[idx].getAttribute('data-v')||0);
+        var bv = parseFloat(b.cells[idx].getAttribute('data-v')||0);
+        return asc ? av-bv : bv-av;
+      });
+      asc = !asc;
+      rows.forEach(function(r){ tb.appendChild(r); });
+    });
+  });
+})();
+</script>
+
+</body>
+</html>
