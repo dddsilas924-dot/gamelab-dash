@@ -555,40 +555,37 @@
 </section>
 
 <section id="okane">
-  <h2><span class="no">11</span>お金の話(Sol検算ずみ)</h2>
+  <h2><span class="no">11</span>お金の話 ― 推定をやめて、公式の確定値だけにした</h2>
   <div class="money-grid">
     <div class="panel">
       <div style="font-weight:800;margin-bottom:8px">手数料のしくみ</div>
       <div class="fee-step"><span class="fee-n">1</span><span>お客がRobux(ゲーム内マネー)を買う ― 目安 1,000 Robux ≒ 約12.5ドル</span></div>
       <div class="fee-step"><span class="fee-n">2</span><span>ゲーム内課金の<b>70%が開発者のもの</b>(30%はRoblox)</span></div>
-      <div class="fee-step"><span class="fee-n">3</span><span>換金レートは購入価格よりかなり安い(100,000 Robux=350ドル)。最低換金額あり(約10万Robux)</span></div>
-      <div class="fee-step"><span class="fee-n">=</span><span>手取りは<b>お客が払った現金の約20%(税引き前)</b>。検算: 12.5ドル→700 Robux→2.45ドル=19.6%</span></div>
+      <div class="fee-step"><span class="fee-n">3</span><span>換金レートは購入価格よりかなり安い(1 Robux=0.0038ドル・100,000 Robux=380ドル)。<b>累計30,000 Robuxから換金できる</b>(=約114ドル≒約1.7万円)</span></div>
+      <div class="fee-step"><span class="fee-n">=</span><span>手取りは<b>お客が払った現金の約21%(税引き前)</b>。検算: 12.5ドル→700 Robux→2.66ドル=21.3%</span></div>
       <div style="font-size:11.5px;color:var(--faint);margin-top:8px">それでも悪くない理由: スマホゲームは「ストアに30%+売上の3〜5割を広告費」が普通。Robloxはお客の9割を無料で連れてくる=20%は広告費・決済・サーバー代ぜんぶ込みの手取り。</div>
     </div>
     <div class="panel">
-      <div style="font-weight:800;margin-bottom:8px">「同時に何人いれば何ができるか」の目安（Roblox公式の公表値をもとにした換算・推定を含む）</div>
-      <table><thead><tr><th style="cursor:default">手取り目標(月)</th><th style="cursor:default">必要な平均客数</th></tr></thead>
+      <div style="font-weight:800;margin-bottom:8px">確かな数字だけ(Roblox公式・推定ゼロ)</div>
+      <table><thead><tr><th style="cursor:default">なに</th><th style="cursor:default">数字</th></tr></thead>
       <tbody>
-        <tr><td>20〜30万円</td><td class="num">つねに100〜220人が店内にいる規模</td></tr>
-        <tr><td>100万円</td><td class="num">約500〜720人</td></tr>
-        <tr><td>300万円(トップ級)</td><td class="num">約1,500〜2,200人</td></tr>
+        <tr><td>最初の現金化ライン</td><td class="num">累計30,000 Robux ≒ <b>約1.7万円</b></td></tr>
+        <tr><td>換金資格を持つ人(2025年末時点・累計)</td><td class="num">世界で35,500人</td></tr>
+        <tr><td>実際に換金した人(2025年の1年間)</td><td class="num">世界で23,500人</td></tr>
+        <tr><td>クリエイターへの支払計上額</td><td class="num">15.0億ドル(約2,250億円)</td></tr>
       </tbody></table>
-      <div style="font-size:11.5px;color:var(--faint);margin-top:8px">今回見つけた小さい新作の実例は同接33〜981人。<b>ただし「何回挑戦すれば1回当たるか(成功率)」はまだ測れていない</b>(Sol指摘・毎日観測を貯めて計測する)。</div>
+      <div style="font-size:11.5px;color:var(--faint);margin-top:8px">出典: Roblox Form 10-K(2025年度)・DevEx公式ヘルプ。<b>支払総額を人数で割らないこと</b>——上位集中が極端で、平均はあなたの見込みを表さない。以前ここにあった「手取り◯万円=同接◯人」の換算表は、廃止した推定係数が逆向きに残っていたものなので撤去した(2026-08-07)。最初の目標は<b>「現金化ライン(約1.7万円)を越える」</b>が具体的で使いやすい。小さい新作の実例は同接33〜981人。</div>
     </div>
   </div>
 
-  <h2 class="sec" style="margin-top:7mm">市場ファネルの可視化 ― 何人が登録して、何人が稼いでいるのか(仮説)</h2>
-  <div class="sub">公式が公表している断片の数字(支払総額・年収帯別の人数)を足場に、べき分布(上位集中の法則)で補間した<b>推定ファネル</b>。バーの長さは対数スケール(1目盛りで10倍違う)。</div>
+  <h2 class="sec" style="margin-top:7mm">現金化のはしご ― 公式が公表した実数だけ</h2>
+  <div class="sub">以前ここにあった「月5万円以上=3〜4万人」等のファネルは、公式の断片からの補間仮説で±数倍ズレうるものだった。2025年度の決算(Form 10-K)に実数が出たので、確定値だけに置き換えた。</div>
   <div class="panel">
-    <div class="fun-row"><span class="fun-label">作られた体験(ゲーム)の累計<small>公式の累計規模感</small></span><div class="fun-track"><div class="fun-bar" style="width:100%"></div></div><span class="fun-val">数千万本<small> 規模</small></span></div>
-    <div class="fun-row"><span class="fun-label">何かしら収益のあるクリエイター<small>収益化の入口</small></span><div class="fun-track"><div class="fun-bar" style="width:72%"></div></div><span class="fun-val">数十万人<small> 規模</small></span></div>
-    <div class="fun-row"><span class="fun-label">月5万円以上<small>≒年4千ドル・副業ライン</small></span><div class="fun-track"><div class="fun-bar" style="width:56%"></div></div><span class="fun-val">3〜4万人<small> (推定)</small></span></div>
-    <div class="fun-row"><span class="fun-label">月30万円以上<small>≒年2.4万ドル・生活ライン</small></span><div class="fun-track"><div class="fun-bar" style="width:47%"></div></div><span class="fun-val">1万人前後<small> (推定)</small></span></div>
-    <div class="fun-row"><span class="fun-label">月100万円以上<small>≒年8万ドル</small></span><div class="fun-track"><div class="fun-bar" style="width:41%"></div></div><span class="fun-val">3千〜6千人<small> (推定)</small></span></div>
-    <div class="fun-row"><span class="fun-label">年10万ドル(約1,500万円)以上<small>公式公表の足場</small></span><div class="fun-track"><div class="fun-bar" style="width:38%"></div></div><span class="fun-val">数千人〜1万人<small> (公式系)</small></span></div>
-    <div class="fun-row"><span class="fun-label">トップ1,000人<small>公式公表の足場</small></span><div class="fun-track"><div class="fun-bar" style="width:30%"></div></div><span class="fun-val">平均 月1,000万円級<small> (公式系)</small></span></div>
+    <div class="fun-row"><span class="fun-label">換金資格(累計3万Robux≒1.7万円)を持つ<small>2025年末時点・確定値</small></span><div class="fun-track"><div class="fun-bar" style="width:100%"></div></div><span class="fun-val">35,500人</span></div>
+    <div class="fun-row"><span class="fun-label">実際に換金した<small>2025年の1年間・確定値</small></span><div class="fun-track"><div class="fun-bar" style="width:66%"></div></div><span class="fun-val">23,500人</span></div>
+    <div class="fun-row"><span class="fun-label">支払として計上された総額<small>2025年・確定値</small></span><div class="fun-track"><div class="fun-bar" style="width:100%"></div></div><span class="fun-val">15.0億ドル</span></div>
   </div>
-  <div class="note-box"><b>読み方と正直な注意:</b> 足場になっている公式系の数字=年間支払総額15億ドル(2025・前年比+63%)/年1万ドル以上を稼ぐクリエイターは万人単位/トップ1,000の平均年収は億円級。<b>「月5万円以上=3〜4万人」「月30万円以上=1万人前後」はそこからの補間仮説で、±数倍ズレうる。</b>それでも構造ははっきりしている——月30万円(トップの10分の1どころか100分の1)のラインは<b>世界で1万人規模が既に到達している「普通にある働き方」</b>で、宝くじではない。<br><b>未公表で測れていないもの:</b> 1日の新規ゲーム公開数(公式非公表。2025年12月の公開資格要件でスパム激減後の実数は、観測所の定点サンプリングで今後推定する→分析メニューに追加)。</div>
+  <div class="note-box"><b>読み方:</b> 「Robloxでお金を受け取る」は世界で年2万人台の出来事で、宝くじではないが自動でもない。分布は上位集中が極端なので、<b>総額÷人数の「平均」は作らない</b>(平均を出した瞬間、実態より良く見える)。<br><b>「同接◯人=月◯円」を出していない理由:</b> 金額にするには「何人が払うか」「1人いくら払うか」が要るが、Robloxはこれを本人の管理画面にしか出さない。外から見える数字だけで金額にした旧表示は、どのゲームも同じ6.67倍の幅になり情報が無かったので撤去した。<b>復活の条件:</b> 受講生・関係者の実測(先月の売上と訪問数)がジャンル×課金型の枠ごとに8件貯まり、ばらつきが3倍以内に収まった枠から、その枠だけ金額の目安を開く。現在0件。</div>
 
 </section>
 
